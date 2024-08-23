@@ -1,0 +1,13 @@
+version: "3"
+services:
+  postgres:
+    image:  postgres
+    restart: always 
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: pokemon_db
+      POSTGRES_PASSWORD: pokemon_password
+    volumes:
+      - ./pg_data:/var/lib/postgresql/data
+    
