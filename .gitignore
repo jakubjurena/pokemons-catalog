@@ -3,6 +3,9 @@
 /node_modules
 /build
 
+# local db
+/pg_data
+
 # Logs
 logs
 *.log
