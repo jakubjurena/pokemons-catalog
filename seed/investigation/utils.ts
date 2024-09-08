@@ -40,3 +40,33 @@ export const frequencyOfAttacks = () => {
   }, {});
   return frequency;
 };
+
+export const attackTypes = () => {
+  const attackTypes = pokemonsJson.reduce((acc, pokemon) => {
+    Object.keys(pokemon.attacks).forEach((attackType) => {
+      acc[attackType] = acc[attackType] ? acc[attackType] + 1 : 1;
+    });
+    return acc;
+  }, {});
+  return attackTypes;
+};
+
+export const fastVsSpecialConflicts = () => {
+  const fast = pokemonsJson.reduce((acc, pokemon) => {
+    pokemon.attacks.fast.forEach((attack) => {
+      acc[attack.name] = acc[attack.name] ? acc[attack.name] + 1 : 1;
+    });
+    return acc;
+  }, {});
+
+  const sepecial = pokemonsJson.reduce((acc, pokemon) => {
+    pokemon.attacks.special.forEach((attack) => {
+      acc[attack.name] = acc[attack.name] ? acc[attack.name] + 1 : 1;
+    });
+    return acc;
+  }, {});
+
+  const conflicts = Object.keys(fast).filter((key) => sepecial[key]);
+
+  return conflicts;
+};
