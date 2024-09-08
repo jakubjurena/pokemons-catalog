@@ -21,10 +21,12 @@
     "investigate:attacks": "npx ts-node ./seed/investigation/attacksFrequency.ts",
     "investigate:class": "npx ts-node ./seed/investigation/classificationFrequency.ts",
     "investigate:key": "npx ts-node ./seed/investigation/keyFrequency.ts",
-    "investigate:type": "npx ts-node ./seed/investigation/typeFrequency.ts"
+    "investigate:type": "npx ts-node ./seed/investigation/typeFrequency.ts",
+    "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
+    "@nestjs/config": "^3.2.3",
     "@nestjs/core": "^10.0.0",
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/typeorm": "^10.0.2",
@@ -54,7 +56,7 @@
     "supertest": "^6.3.3",
     "ts-jest": "^29.1.0",
     "ts-loader": "^9.4.3",
-    "ts-node": "^10.9.1",
+    "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.1.3"
   },
