@@ -4,6 +4,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
+import { PokemonModule } from '../pokemon/pokemon.module';
+import { TypeModule } from '../type/type.module';
 
 @Module({
   imports: [
@@ -18,6 +20,8 @@ import { ConfigModule } from '@nestjs/config';
       autoLoadEntities: true,
       synchronize: true, // DO NOT USE IN PRODUCTION - disable and use migrations
     }),
+    PokemonModule,
+    TypeModule,
   ],
   controllers: [AppController],
   providers: [AppService],

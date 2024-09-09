@@ -3,7 +3,7 @@ import { Candy } from 'src/modules/pokemon/entities/candy.entity';
 import { Class } from 'src/modules/pokemon/entities/class.entity';
 import { Classification } from 'src/modules/pokemon/entities/classification.entity';
 import { Pokemon } from 'src/modules/pokemon/entities/pokemon.entity';
-import { PokemonType } from 'src/modules/pokemon/entities/pokemonType.entity';
+import { PokemonType } from 'src/modules/type/entities/pokemonType.entity';
 import { DataSource } from 'typeorm';
 
 export default new DataSource({
