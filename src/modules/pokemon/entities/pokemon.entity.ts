@@ -65,10 +65,12 @@ export class Pokemon {
   @Column('int')
   maxHP: number;
 
-  @ManyToOne(() => Pokemon)
+  @ManyToMany(() => Pokemon)
+  @JoinTable({ name: 'pokemon_previous_evolutions' })
   previousEvolutions: Pokemon[];
 
-  @ManyToOne(() => Pokemon)
+  @ManyToMany(() => Pokemon)
+  @JoinTable({ name: 'pokemon_next_evolutions' })
   nextEvolutions: Pokemon[];
 
   @Column()
