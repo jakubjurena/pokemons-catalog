@@ -5,7 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { PokemonModule } from '../pokemon/pokemon.module';
-import { PokemonTypeModule } from '../pokemon-type/pokemonType.module';
+import { PokemonTypeModule } from '../pokemon-type/pokemon-type.module';
 
 @Module({
   imports: [

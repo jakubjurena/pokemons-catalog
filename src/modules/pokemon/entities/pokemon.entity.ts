@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Classification } from './classification.entity';
-import { PokemonType } from '../../pokemon-type/entities/pokemonType.entity';
+import { PokemonType } from '../../pokemon-type/entities/pokemon-type.entity';
 import { Class } from './class.entity';
 import { Candy } from './candy.entity';
 

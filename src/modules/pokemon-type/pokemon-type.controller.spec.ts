@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { PokemonTypeController } from './pokemonType.controller';
+import { PokemonTypeController } from './pokemon-type.controller';
 
 describe('PokemonTypeController', () => {
   let controller: PokemonTypeController;
