@@ -1,10 +1,10 @@
 import {
-  Body,
   Controller,
   Get,
   Logger,
   Param,
   ParseIntPipe,
+  Query,
 } from '@nestjs/common';
 import { PokemonFilterDto } from './dto/pokemon-filter.dto';
 
@@ -14,7 +14,7 @@ export class PokemonController {
   constructor() {}
 
   @Get()
-  findAll(@Body() filter: PokemonFilterDto) {
+  findAll(@Query() filter: PokemonFilterDto) {
     this.logger.log(
       `Returning all pokemons with filter: ${JSON.stringify(filter)}`,
     );

@@ -1,5 +1,7 @@
-import { IsBoolean, IsInt, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsOptional, IsString } from 'class-validator';
 import { PaginationDto } from 'src/common';
+import { IsIntString } from 'src/common/decorators/IsIntString.decorator';
+import { TransformValueToBoolean } from 'src/common/decorators/TransformToBoolean.decorator';
 
 /**
  * PokemonFilterDto
@@ -14,10 +16,11 @@ export class PokemonFilterDto extends PaginationDto {
   name?: string;
 
   @IsOptional()
-  @IsInt({ each: true })
+  @IsIntString({ each: true })
   pokemonTypeIds?: number[];
 
   @IsOptional()
+  @TransformValueToBoolean()
   @IsBoolean()
   isFavorite?: boolean;
 }
