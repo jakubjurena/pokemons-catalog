@@ -1,5 +1,5 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { PokemonType } from '../../type/entities/pokemonType.entity';
+import { PokemonType } from '../../pokemon-type/entities/pokemonType.entity';
 import { AttackType } from '../enums/attack-type.enum';
 
 @Entity()

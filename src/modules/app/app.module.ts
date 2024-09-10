@@ -5,7 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { PokemonModule } from '../pokemon/pokemon.module';
-import { TypeModule } from '../type/type.module';
+import { PokemonTypeModule } from '../pokemon-type/pokemonType.module';
 
 @Module({
   imports: [
@@ -21,7 +21,7 @@ import { TypeModule } from '../type/type.module';
       synchronize: true, // DO NOT USE IN PRODUCTION - disable and use migrations
     }),
     PokemonModule,
-    TypeModule,
+    PokemonTypeModule,
   ],
   controllers: [AppController],
   providers: [AppService],
