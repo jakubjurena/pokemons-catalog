@@ -9,6 +9,9 @@ export class Class {
   @Column()
   name: string;
 
+  @Column()
+  description: string;
+
   @OneToMany(() => Pokemon, (pokemon) => pokemon.classification)
   pokemons: Pokemon[];
 }

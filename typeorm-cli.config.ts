@@ -1,5 +1,4 @@
 import { Attack } from 'src/modules/pokemon/entities/attack.entity';
-import { Candy } from 'src/modules/pokemon/entities/candy.entity';
 import { Class } from 'src/modules/pokemon/entities/class.entity';
 import { Classification } from 'src/modules/pokemon/entities/classification.entity';
 import { Pokemon } from 'src/modules/pokemon/entities/pokemon.entity';
@@ -14,6 +13,6 @@ export default new DataSource({
   password: 'pokemon_password',
   database: 'pokemon_db',
   synchronize: true,
-  entities: [Attack, Candy, Class, Classification, Pokemon, PokemonType],
+  entities: [Attack, Class, Classification, Pokemon, PokemonType],
   migrations: [],
 });

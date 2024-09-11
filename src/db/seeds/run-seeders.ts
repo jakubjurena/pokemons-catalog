@@ -4,6 +4,7 @@ import { dataSourceOptions } from '../data-source';
 import PokemonTypesSeeder from './pokemon-type.seeder';
 import ClasssificationsSeeder from './classifications.seeder';
 import AttacksSeeder from './attacks.seeder';
+import ClassesSeeder from './classes.seeder';
 
 (async () => {
   const dataSource = new DataSource({
@@ -13,6 +14,11 @@ import AttacksSeeder from './attacks.seeder';
   await dataSource.initialize();
 
   await runSeeders(dataSource, {
-    seeds: [PokemonTypesSeeder, ClasssificationsSeeder, AttacksSeeder],
+    seeds: [
+      PokemonTypesSeeder,
+      ClasssificationsSeeder,
+      ClassesSeeder,
+      AttacksSeeder,
+    ],
   });
 })();

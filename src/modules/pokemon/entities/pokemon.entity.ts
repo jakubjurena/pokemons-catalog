@@ -9,7 +9,6 @@ import {
 import { Classification } from './classification.entity';
 import { PokemonType } from '../../pokemon-type/entities/pokemon-type.entity';
 import { Class } from './class.entity';
-import { Candy } from './candy.entity';
 
 @Entity()
 export class Pokemon {
@@ -76,6 +75,6 @@ export class Pokemon {
   @Column()
   evolutionRequirementAmount: number;
 
-  @ManyToOne(() => Candy, { eager: true })
-  evolutionRequirementCandy: Candy;
+  @Column()
+  evolutionRequirementCandy: string;
 }
