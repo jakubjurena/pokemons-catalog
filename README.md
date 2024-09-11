@@ -34,6 +34,24 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
+## Investigation
+
+Few scripts for data investigation.
+
+```bash
+# Console log info about attacks from JSON
+$ investigate:attacks
+
+# Console log info about classifications from JSON
+$ investigate:class
+
+# Console log info about pokemon keys object
+$ investigate:key
+
+# Console log info about pokemon types
+$ investigate:type
+```
+
 ## Database schema
 
 Schema is described in `pokemon-schema.drawio.svg`.
