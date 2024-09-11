@@ -1,6 +1,9 @@
 import { DataSource } from 'typeorm';
 import { runSeeders } from 'typeorm-extension';
 import { dataSourceOptions } from '../data-source';
+import PokemonTypesSeeder from './pokemon-type.seeder';
+import ClasssificationsSeeder from './classifications.seeder';
+import AttacksSeeder from './attacks.seeder';
 
 (async () => {
   const dataSource = new DataSource({
@@ -10,6 +13,6 @@ import { dataSourceOptions } from '../data-source';
   await dataSource.initialize();
 
   await runSeeders(dataSource, {
-    seeds: ['./**/*.seeder.ts'],
+    seeds: [PokemonTypesSeeder, ClasssificationsSeeder, AttacksSeeder],
   });
 })();

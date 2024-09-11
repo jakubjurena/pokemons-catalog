@@ -5,8 +5,8 @@ import { Seeder } from 'typeorm-extension';
 import { Classification } from '../../modules/pokemon/entities/classification.entity';
 import { classifications } from './investigation/classification';
 
-export default class ClassificationSeeder implements Seeder {
-  private readonly logger = new Logger(ClassificationSeeder.name);
+export default class ClassificationsSeeder implements Seeder {
+  private readonly logger = new Logger(ClassificationsSeeder.name);
 
   public async run(dataSource: DataSource): Promise<void> {
     const repository = dataSource.getRepository(Classification);

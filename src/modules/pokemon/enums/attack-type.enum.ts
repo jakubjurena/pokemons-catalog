@@ -1,4 +1,4 @@
 export enum AttackType {
-  FAST = 'fast',
-  SPECIAL = 'special',
+  fast = 'fast',
+  special = 'special',
 }
