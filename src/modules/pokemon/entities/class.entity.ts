@@ -4,7 +4,7 @@ import { Pokemon } from './pokemon.entity';
 @Entity()
 export class Class {
   @PrimaryGeneratedColumn()
-  classificationId: number;
+  classId: number;
 
   @Column()
   name: string;

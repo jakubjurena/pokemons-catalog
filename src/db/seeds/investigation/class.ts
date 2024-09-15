@@ -1,6 +1,11 @@
 import { frequencyOfValues } from './utils';
 import pokemonsJson from '../pokemons.json';
 
+export const getClassFromDescription = (description: string) => {
+  const groups = /^(This is a )(.*)( Pokémon.)/.exec(description);
+  return groups?.[2];
+};
+
 export const classesDescriptions = Object.keys(
   frequencyOfValues(pokemonsJson, ['Pokémon Class']),
 ).reduce(
@@ -8,8 +13,8 @@ export const classesDescriptions = Object.keys(
     if (value === undefined || value === 'undefined') {
       return acc;
     }
-    const groups = /^(This is a )(.*)( Pokémon.)/.exec(value);
-    acc[groups?.[2]] = value;
+    const className = getClassFromDescription(value);
+    acc[className] = value;
     return acc;
   },
   {} as Record<string, string>,

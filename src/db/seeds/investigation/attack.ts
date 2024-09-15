@@ -1,5 +1,28 @@
 import pokemonsJson from '../pokemons.json';
 
+// type PokemonsJSON = typeof pokemonsJson;
+// type PokemonJSON = PokemonsJSON[0];
+// type PokemonAttackTypesJSON = keyof PokemonJSON['attacks'];
+// type PokemonAttackJSON = PokemonJSON['attacks'][PokemonAttackTypesJSON][0];
+
+export const getPokemonAttacksByName = (pokemon) => {
+  return Object.entries(pokemon.attacks).reduce(
+    (acc, [attackType, attacks]) => {
+      const newAttacks = (attacks as any)
+        .map((attack) => ({
+          attackType,
+          ...attack,
+        }))
+        .reduce((acc, attack) => {
+          return { ...acc, [attack.name]: attack };
+        }, {});
+
+      return { ...acc, ...newAttacks };
+    },
+    {},
+  );
+};
+
 export const attacksFrequency = pokemonsJson.reduce((acc, pokemon) => {
   Object.keys(pokemon.attacks).forEach((attackType) => {
     pokemon.attacks[attackType].forEach((attack) => {
@@ -18,21 +41,17 @@ export const attackTypeFrequency = pokemonsJson.reduce((acc, pokemon) => {
 }, {});
 export const attackTypes = Object.keys(attackTypeFrequency);
 
-export const attacksByType = pokemonsJson.reduce((acc, pokemon) => {
-  Object.keys(pokemon.attacks).forEach((attackType) => {
-    acc[attackType] = acc[attackType] || {};
-    pokemon.attacks[attackType].forEach((attack) => {
-      if (
-        acc[attackType][attack.name] &&
-        (acc[attackType][attack.name].type !== attack.type ||
-          acc[attackType][attack.name].damage !== attack.damage)
-      ) {
-        throw new Error(
-          `Attack missmatch: Attack1 ${JSON.stringify(acc[attackType][attack.name])} Attack2 ${JSON.stringify(attack)}`,
-        );
-      }
-      acc[attackType][attack.name] = attack;
-    });
-  });
-  return acc;
+export const allAttacks = pokemonsJson.reduce((acc, pokemon) => {
+  const pokemonAttacks = getPokemonAttacksByName(pokemon);
+  return { ...acc, ...pokemonAttacks };
 }, {});
+
+export const attacksByType = Object.keys(allAttacks).reduce(
+  (acc, attackName) => {
+    const attack = allAttacks[attackName];
+    acc[attack.attackType] = acc[attack.attackType] || {};
+    acc[attack.attackType][attackName] = attack;
+    return acc;
+  },
+  {},
+);

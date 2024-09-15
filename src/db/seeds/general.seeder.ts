@@ -1,5 +1,11 @@
 import { Logger } from '@nestjs/common';
-import { DataSource, EntityTarget, ObjectLiteral, Repository } from 'typeorm';
+import {
+  DataSource,
+  EntityManager,
+  EntityTarget,
+  ObjectLiteral,
+  Repository,
+} from 'typeorm';
 import { Seeder } from 'typeorm-extension';
 
 export default abstract class GeneralSeeder implements Seeder {
@@ -8,7 +14,7 @@ export default abstract class GeneralSeeder implements Seeder {
   abstract run(dataSource: DataSource): Promise<void>;
 
   protected async getMainRepository<Entity extends ObjectLiteral>(
-    dataSource: DataSource,
+    dataSource: DataSource | EntityManager,
     target: EntityTarget<Entity>,
   ): Promise<Repository<Entity>> {
     const targetRepository = dataSource.getRepository(target);

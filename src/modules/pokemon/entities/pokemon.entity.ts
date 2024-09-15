@@ -4,7 +4,7 @@ import {
   JoinTable,
   ManyToMany,
   ManyToOne,
-  PrimaryGeneratedColumn,
+  PrimaryColumn,
 } from 'typeorm';
 import { Classification } from './classification.entity';
 import { PokemonType } from '../../pokemon-type/entities/pokemon-type.entity';
@@ -12,7 +12,7 @@ import { Class } from './class.entity';
 
 @Entity()
 export class Pokemon {
-  @PrimaryGeneratedColumn()
+  @PrimaryColumn()
   pokemonId: number;
 
   @Column()
@@ -43,19 +43,19 @@ export class Pokemon {
   @JoinTable({ name: 'pokemon_weaknesses' })
   weaknesses: PokemonType[];
 
-  @Column()
+  @Column('float')
   minWeight: number;
 
-  @Column()
+  @Column('float')
   maxWeight: number;
 
-  @Column()
+  @Column('float')
   minHeight: number;
 
-  @Column()
+  @Column('float')
   maxHeight: number;
 
-  @Column()
+  @Column('float')
   fleeRate: number;
 
   @Column('int')
@@ -72,9 +72,9 @@ export class Pokemon {
   @JoinTable({ name: 'pokemon_next_evolutions' })
   nextEvolutions: Pokemon[];
 
-  @Column()
-  evolutionRequirementAmount: number;
+  @Column({ nullable: true })
+  evolutionRequirementAmount: number | null;
 
-  @Column()
-  evolutionRequirementCandy: string;
+  @Column({ nullable: true })
+  evolutionRequirementCandy: string | null;
 }
