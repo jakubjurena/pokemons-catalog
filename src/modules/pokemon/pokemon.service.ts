@@ -5,8 +5,15 @@ import { Pokemon } from './entities/pokemon.entity';
 import { PokemonFilterDto } from './dto/pokemon-filter.dto';
 
 const POKEMON_RELATIONS: FindOneOptions<Pokemon>['relations'] = [
+  'class',
+  'classification',
   'nextEvolutions',
   'previousEvolutions',
+  'types',
+  'resistant',
+  'weaknesses',
+  'attacks',
+  'classification',
 ];
 
 @Injectable()

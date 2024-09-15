@@ -9,6 +9,7 @@ import {
 import { Classification } from './classification.entity';
 import { PokemonType } from '../../pokemon-type/entities/pokemon-type.entity';
 import { Class } from './class.entity';
+import { Attack } from './attack.entity';
 
 @Entity()
 export class Pokemon {
@@ -21,27 +22,30 @@ export class Pokemon {
   @ManyToOne(
     () => Classification,
     (classification) => classification.pokemons,
-    { nullable: false, eager: true },
+    { nullable: false },
   )
   classification: Classification;
 
   @ManyToOne(() => Class, (classType) => classType.pokemons, {
     nullable: true,
-    eager: true,
   })
-  class?: Class;
+  class: Class | null;
 
-  @ManyToMany(() => PokemonType, { nullable: false, eager: true })
+  @ManyToMany(() => PokemonType, { nullable: false })
   @JoinTable({ name: 'pokemon_types' })
   types: PokemonType[];
 
-  @ManyToMany(() => PokemonType, { eager: true })
+  @ManyToMany(() => PokemonType, { nullable: false })
   @JoinTable({ name: 'pokemon_resistances' })
   resistant: PokemonType[];
 
-  @ManyToMany(() => PokemonType, { eager: true })
+  @ManyToMany(() => PokemonType, { nullable: false })
   @JoinTable({ name: 'pokemon_weaknesses' })
   weaknesses: PokemonType[];
+
+  @ManyToMany(() => Attack, { nullable: false })
+  @JoinTable({ name: 'pokemon_attacks' })
+  attacks: Attack[];
 
   @Column('float')
   minWeight: number;

@@ -12,156 +12,142 @@ import GeneralSeeder from './general.seeder';
 import { getPokemonAttacksByName } from './investigation/attack';
 import { getClassFromDescription } from './investigation/class';
 
+type PokemonJSON = (typeof pokemonsJson)[0];
+
+const mapPokemonJsonToPokemon = (pokemon: PokemonJSON) => {
+  return {
+    pokemonId: parseInt(pokemon.id),
+    name: pokemon.name,
+    classification: null,
+    class: null,
+    types: [],
+    resistant: [],
+    weaknesses: [],
+    minWeight: parseFloat(pokemon.weight.minimum.replace('kg', '')),
+    maxWeight: parseFloat(pokemon.weight.maximum.replace('kg', '')),
+    minHeight: parseFloat(pokemon.height.minimum.replace('m', '')),
+    maxHeight: parseFloat(pokemon.height.maximum.replace('m', '')),
+    fleeRate: pokemon.fleeRate,
+    maxCP: pokemon.maxCP,
+    maxHP: pokemon.maxHP,
+    attacks: [],
+    evolutionRequirementAmount: pokemon.evolutionRequirements?.amount,
+    evolutionRequirementCandy: pokemon.evolutionRequirements?.name,
+  };
+};
 export default class PokemonSeeder extends GeneralSeeder {
   constructor() {
     super(new Logger(PokemonSeeder.name));
   }
 
   public async run(dataSource: DataSource): Promise<void> {
-    dataSource.transaction(async (transactionalEntityManager) => {
-      const pokemonRepository = await this.getMainRepository(
-        transactionalEntityManager,
-        Pokemon,
+    const pokemonRepository = await this.getMainRepository(dataSource, Pokemon);
+    if (pokemonRepository === null) {
+      return;
+    }
+
+    const [
+      pokemonTypesRepository,
+      attacksRepository,
+      classesRepository,
+      classificationsRepository,
+    ] = await Promise.all([
+      this.getDependencyRepository(dataSource, PokemonType),
+      this.getDependencyRepository(dataSource, Attack),
+      this.getDependencyRepository(dataSource, Class),
+      this.getDependencyRepository(dataSource, Classification),
+    ]);
+
+    if (
+      pokemonTypesRepository === null ||
+      attacksRepository === null ||
+      classesRepository === null ||
+      classificationsRepository === null
+    ) {
+      this.logger.error('Dependencies not seeded.');
+      return;
+    }
+
+    this.logger.verbose(`Inserting ${pokemonsJson.length} pokemons...`);
+
+    const attacks = await attacksRepository.find();
+    const classes = await classesRepository.find();
+    const classifications = await classificationsRepository.find();
+    const pokemonTypes = await pokemonTypesRepository.find();
+
+    // Create a dictionary for faster lookup
+    const attacksByName = attacks.reduce((acc, attack) => {
+      acc[attack.name] = attack;
+      return acc;
+    }, {});
+    const classesByName = classes.reduce((acc, classObject) => {
+      acc[classObject.name] = classObject;
+      return acc;
+    }, {});
+    const classificationsByName = classifications.reduce(
+      (acc, classification) => {
+        acc[classification.name] = classification;
+        return acc;
+      },
+      {},
+    );
+    const pokemonTypesByName = pokemonTypes.reduce((acc, type) => {
+      acc[type.name] = type;
+      return acc;
+    }, {});
+
+    // Map the pokemons to the database schema and add relations
+    const pokemons = pokemonsJson.map((pokemon) => {
+      const attacks = Object.values(getPokemonAttacksByName(pokemon)).map(
+        (attack: any) => attacksByName[attack.name],
       );
-      if (pokemonRepository === null) {
-        return;
-      }
-
-      const [
-        pokemonTypesRepository,
-        attacksRepository,
-        classesRepository,
-        classificationsRepository,
-      ] = await Promise.all([
-        this.getDependencyRepository(dataSource, PokemonType),
-        this.getDependencyRepository(dataSource, Attack),
-        this.getDependencyRepository(dataSource, Class),
-        this.getDependencyRepository(dataSource, Classification),
-      ]);
-
-      if (
-        pokemonTypesRepository === null ||
-        attacksRepository === null ||
-        classesRepository === null ||
-        classificationsRepository === null
-      ) {
-        this.logger.error('Dependencies not seeded.');
-        return;
-      }
-
-      this.logger.verbose(`Inserting ${pokemonsJson.length} pokemons...`);
-
-      // TODO: Insert pokemons
-      const attacks = await attacksRepository.find();
-      const classes = await classesRepository.find();
-      const classifications = await classificationsRepository.find();
-      const pokemonTypes = await pokemonTypesRepository.find();
-
-      const attacksByName = attacks.reduce((acc, attack) => {
-        acc[attack.name] = attack;
-        return acc;
-      }, {});
-      const classesByName = classes.reduce((acc, classObject) => {
-        acc[classObject.name] = classObject;
-        return acc;
-      }, {});
-      const classificationsByName = classifications.reduce(
-        (acc, classification) => {
-          acc[classification.name] = classification;
-          return acc;
-        },
-        {},
+      const types = Object.values(pokemon['types']).map(
+        (type: any) => pokemonTypesByName[type],
       );
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const pokemonTypesByName = pokemonTypes.reduce((acc, type) => {
-        acc[type.name] = type;
-        return acc;
-      }, {});
+      const resistant = Object.values(pokemon.resistant).map(
+        (type: any) => pokemonTypesByName[type],
+      );
+      const weaknesses = Object.values(pokemon.weaknesses).map(
+        (type: any) => pokemonTypesByName[type],
+      );
+      const classification = classificationsByName[pokemon.classification];
+      const classObject =
+        classesByName[getClassFromDescription(pokemon['Pokémon Class'])];
 
-      // await pokemonRepository.insert(
-      const pokemons = pokemonsJson.map((pokemon) => {
-        const attacks = Object.values(getPokemonAttacksByName(pokemon)).map(
-          (attack: any) => attacksByName[attack.name],
+      const nextEvolutions = pokemon.evolutions?.map((evolution) => ({
+        pokemonId: evolution.id,
+      }));
+      const previousEvolutions = pokemon['Previous evolution(s)']?.map(
+        (evolution) => ({
+          pokemonId: evolution.id,
+        }),
+      );
+      if (previousEvolutions?.length > 0) {
+        this.logger.verbose(
+          `Pokemon ${pokemon.name} has ${previousEvolutions.length} previous evolutions.`,
         );
-        const classification = classificationsByName[pokemon.classification];
-        const classObject =
-          classesByName[getClassFromDescription(pokemon['Pokémon Class'])];
-        return {
-          // ...pokemon,
-          pokemonId: parseInt(pokemon.id),
-          name: pokemon.name,
-          classification,
-          class: classObject,
-          types: [],
-          resistant: [],
-          weaknesses: [],
-          minWeight: parseFloat(pokemon.weight.minimum.replace('kg', '')),
-          maxWeight: parseFloat(pokemon.weight.maximum.replace('kg', '')),
-          minHeight: parseFloat(pokemon.height.minimum.replace('m', '')),
-          maxHeight: parseFloat(pokemon.height.maximum.replace('m', '')),
-          fleeRate: pokemon.fleeRate,
-          maxCP: pokemon.maxCP,
-          maxHP: pokemon.maxHP,
-          attacks,
-          evolutionRequirementAmount: pokemon.evolutionRequirements?.amount,
-          evolutionRequirementCandy: pokemon.evolutionRequirements?.name,
-        };
-      });
-
-      pokemonRepository.manager.transaction(async (manager) => {
-        await manager.getRepository(Pokemon).save(pokemons);
-      });
-
-      const insertedPokemons = await pokemonRepository.insert(pokemons);
-
-      for (const pokemon of pokemonsJson) {
-        if (pokemon['Previous evolution(s)']?.length > 0) {
-          const previousEvolutions = await pokemonRepository.find({
-            where: {
-              pokemonId: In(pokemon['Previous evolution(s)']?.map((p) => p.id)),
-            },
-          });
-          if (previousEvolutions.length > 0) {
-            this.logger.verbose(
-              `Pokemon ${pokemon.name} has ${previousEvolutions.length} previous evolutions.`,
-            );
-            const insertedPokemon = insertedPokemons.identifiers.find(
-              (p) => p.pokemonId === parseInt(pokemon.id),
-            );
-            await pokemonRepository.save({
-              ...insertedPokemon,
-              previousEvolutions,
-            });
-          } else {
-            this.logger.error(
-              `Can't find ${pokemon.name} previous evolutions.`,
-            );
-          }
-        }
-        if (pokemon.evolutions?.length > 0) {
-          const nextEvolutions = await pokemonRepository.find({
-            where: {
-              pokemonId: In(pokemon.evolutions.map((p) => p.id)),
-            },
-          });
-          if (nextEvolutions.length > 0) {
-            this.logger.verbose(
-              `Pokemon ${pokemon.name} has ${nextEvolutions.length} evolutions.`,
-            );
-            const insertedPokemon = insertedPokemons.identifiers.find(
-              (p) => p.pokemonId === parseInt(pokemon.id),
-            );
-            await pokemonRepository.save({
-              ...insertedPokemon,
-              nextEvolutions,
-            });
-          } else {
-            this.logger.error(`Can't find ${pokemon.name} evolutions.`);
-          }
-        }
       }
-
-      this.logger.log('Successfully inserted.');
+      if (nextEvolutions?.length > 0) {
+        this.logger.verbose(
+          `Pokemon ${pokemon.name} has ${nextEvolutions.length} evolutions.`,
+        );
+      }
+      return {
+        ...mapPokemonJsonToPokemon(pokemon),
+        classification,
+        class: classObject,
+        types,
+        resistant,
+        weaknesses,
+        attacks,
+        nextEvolutions,
+        previousEvolutions,
+      };
     });
+
+    // Save to the database with relations
+    await pokemonRepository.save(pokemons);
+
+    this.logger.log('Successfully inserted.');
   }
 }
