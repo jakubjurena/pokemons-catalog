@@ -7,18 +7,27 @@ import {
   Query,
 } from '@nestjs/common';
 import { PokemonFilterDto } from './dto/pokemon-filter.dto';
+import { PokemonService } from './pokemon.service';
 
 @Controller('pokemon')
 export class PokemonController {
   private readonly logger: Logger = new Logger(PokemonController.name);
-  constructor() {}
+  constructor(private readonly pokemonService: PokemonService) {}
 
   @Get()
   findAll(@Query() filter: PokemonFilterDto) {
     this.logger.log(
       `Returning all pokemons with filter: ${JSON.stringify(filter)}`,
     );
-    return ['Bulbasaur', 'Charmander', 'Squirtle'];
+    return this.pokemonService.findAll(filter);
+  }
+
+  @Get('count')
+  count(@Query() filter: PokemonFilterDto) {
+    this.logger.log(
+      `Returning the number of pokemons for filter: ${JSON.stringify(filter)}`,
+    );
+    return this.pokemonService.count(filter);
   }
 
   @Get('byName/:name')

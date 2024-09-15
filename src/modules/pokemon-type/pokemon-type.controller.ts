@@ -1,5 +1,5 @@
 import { Controller, Get, Logger, Query } from '@nestjs/common';
-import { PokemonTypeFilterDto } from './dto/pokemon-type.dto';
+import { PokemonTypeFilterDto } from './dto/pokemon-type-filter.dto';
 import { PokemonTypeService } from './pokemon-type.service';
 
 export const POKEMON_TYPE_ENDPOINT = 'pokemon-type';

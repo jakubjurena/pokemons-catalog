@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { PokemonTypeFilterDto } from './dto/pokemon-type.dto';
+import { PokemonTypeFilterDto } from './dto/pokemon-type-filter.dto';
 import { PokemonType } from './entities/pokemon-type.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
