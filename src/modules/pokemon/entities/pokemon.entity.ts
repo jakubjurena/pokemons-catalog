@@ -15,7 +15,7 @@ export class Pokemon {
   @PrimaryColumn()
   pokemonId: number;
 
-  @Column()
+  @Column({ unique: true })
   name: string;
 
   @ManyToOne(

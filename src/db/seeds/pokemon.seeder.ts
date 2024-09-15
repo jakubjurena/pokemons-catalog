@@ -103,8 +103,6 @@ export default class PokemonSeeder extends GeneralSeeder {
           maxCP: pokemon.maxCP,
           maxHP: pokemon.maxHP,
           attacks,
-          // previousEvolutions: [],
-          // nextEvolutions: [],
           evolutionRequirementAmount: pokemon.evolutionRequirements?.amount,
           evolutionRequirementCandy: pokemon.evolutionRequirements?.name,
         };

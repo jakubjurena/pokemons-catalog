@@ -3,7 +3,7 @@ import { PokemonTypeFilterDto } from './dto/pokemon-type-filter.dto';
 import { PokemonTypeService } from './pokemon-type.service';
 
 export const POKEMON_TYPE_ENDPOINT = 'pokemon-type';
-@Controller('pokemon-type')
+@Controller(POKEMON_TYPE_ENDPOINT)
 export class PokemonTypeController {
   private readonly logger: Logger = new Logger(PokemonTypeController.name);
 
@@ -12,7 +12,7 @@ export class PokemonTypeController {
   @Get()
   findAll(@Query() filter: PokemonTypeFilterDto) {
     this.logger.verbose(
-      `GET: "/${POKEMON_TYPE_ENDPOINT}" - filter ${JSON.stringify(filter)}`,
+      `GET: "/${POKEMON_TYPE_ENDPOINT}" - Returning all pokemon types with filter: ${JSON.stringify(filter)}`,
     );
     return this.pokemonTypeService.findAll(filter);
   }
