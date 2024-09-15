@@ -1,25 +1,29 @@
 import { Logger } from '@nestjs/common';
 import { DataSource } from 'typeorm';
-import { Seeder } from 'typeorm-extension';
 
 import { Attack } from '../../modules/pokemon/entities/attack.entity';
 import { PokemonType } from '../../modules/pokemon-type/entities/pokemon-type.entity';
 import { attacksByType } from './investigation/attack';
 import { AttackType } from '../../modules/pokemon/enums/attack-type.enum';
+import GeneralSeeder from './general.seeder';
 
-export default class AttacksSeeder implements Seeder {
-  private readonly logger = new Logger(AttacksSeeder.name);
+export default class AttacksSeeder extends GeneralSeeder {
+  constructor() {
+    super(new Logger(AttacksSeeder.name));
+  }
 
   public async run(dataSource: DataSource): Promise<void> {
-    const attacksRepository = dataSource.getRepository(Attack);
-    const pokemonTypesRepository = dataSource.getRepository(PokemonType);
-    if ((await attacksRepository.count()) > 0) {
-      this.logger.log('Already seeded.');
+    const attacksRepository = await this.getMainRepository(dataSource, Attack);
+    if (attacksRepository === null) {
       return;
     }
 
-    if ((await pokemonTypesRepository.count()) === 0) {
-      this.logger.error('Pokemon types not seeded.');
+    const pokemonTypesRepository = await this.getDependencyRepository(
+      dataSource,
+      PokemonType,
+    );
+    if (pokemonTypesRepository === null) {
+      this.logger.error('Dependencies not seeded.');
       return;
     }
 
@@ -28,17 +32,11 @@ export default class AttacksSeeder implements Seeder {
       acc[type.name] = type;
       return acc;
     }, {});
-    // this.logger.log(`pokemonTypesByName ${JSON.stringify(pokemonTypesByName)}`);
-
-    this.logger.log('Inserting...');
 
     const attackTypes = Object.keys(attacksByType).map(async (type) => {
-      this.logger.log(`Inserting ${type} attacks...`);
       const attackType = AttackType[type.toLowerCase()];
-      this.logger.log(`Attack type ${attackType}`);
-      this.logger.log(`Attack types ${JSON.stringify(AttackType)}`);
       const attacks = Object.values(attacksByType[type]);
-      this.logger.log(`${type} attacks to insert count ${attacks.length}`);
+      this.logger.verbose(`Inserting ${attacks.length} ${type} attacks...`);
       await attacksRepository.insert(
         attacks.map((attack: any) => ({
           name: attack.name,
@@ -47,7 +45,6 @@ export default class AttacksSeeder implements Seeder {
           type: pokemonTypesByName[attack.type],
         })),
       );
-      // await repository.insert(pokemonTypes.map((name) => ({ name })));
     });
 
     await Promise.all(attackTypes);

@@ -1,22 +1,23 @@
 import { Logger } from '@nestjs/common';
 import { DataSource } from 'typeorm';
-import { Seeder } from 'typeorm-extension';
 
 import { Class } from '../../modules/pokemon/entities/class.entity';
 import { classesDescriptions } from './investigation/class';
+import GeneralSeeder from './general.seeder';
 
-export default class ClassesSeeder implements Seeder {
-  private readonly logger = new Logger(ClassesSeeder.name);
+export default class ClassesSeeder extends GeneralSeeder {
+  constructor() {
+    super(new Logger(ClassesSeeder.name));
+  }
 
   public async run(dataSource: DataSource): Promise<void> {
-    const repository = dataSource.getRepository(Class);
-    if ((await repository.count()) > 0) {
-      this.logger.log('Already seeded.');
+    const repository = await this.getMainRepository(dataSource, Class);
+    if (repository === null) {
       return;
     }
-    this.logger.log('Inserting...');
-    this.logger.log(
-      `Clasees to insert: ${JSON.stringify(classesDescriptions)}`,
+
+    this.logger.verbose(
+      `Inserting ${Object.keys(classesDescriptions).length} pokemon classes...`,
     );
     await repository.insert(
       Object.entries(classesDescriptions).map(([name, description]) => ({
