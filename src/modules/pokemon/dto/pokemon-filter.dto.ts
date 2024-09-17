@@ -6,9 +6,9 @@ import { TransformValueToBoolean } from 'src/common/decorators/TransformToBoolea
 /**
  * PokemonFilterDto
  * @description A data transfer object that represents the pokemon filter
- * @property name - The name of the pokemon
- * @property typeIds - The type ids of the pokemon
- * @property isFavorite - The favorite status of the pokemon
+ * @property {string} name - The name of the pokemon
+ * @property {number[]} typeIds - The type ids of the pokemon
+ * @property {boolean} isFavorite - The favorite status of the pokemon
  */
 export class PokemonFilterDto extends PaginationDto {
   @IsOptional()

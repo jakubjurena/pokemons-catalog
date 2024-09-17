@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+import { IamModule } from '../iam/iam.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
@@ -10,6 +11,7 @@ import { dataSourceOptions } from 'src/db/data-source';
 
 @Module({
   imports: [
+    IamModule,
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot(dataSourceOptions),
     PokemonModule,
