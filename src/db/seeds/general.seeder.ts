@@ -26,13 +26,13 @@ export default abstract class GeneralSeeder implements Seeder {
   }
 
   protected async getDependencyRepository<Entity extends ObjectLiteral>(
-    dataSource: DataSource,
+    dataSource: DataSource | EntityManager,
     target: EntityTarget<Entity>,
   ): Promise<Repository<Entity>> {
     const targetRepository = dataSource.getRepository(target);
     if ((await targetRepository.count()) === 0) {
       this.logger.warn(`${(target as any).name} not seeded.`);
-      return null;
+      throw new Error(`${(target as any).name} not seeded.`);
     }
     return targetRepository;
   }

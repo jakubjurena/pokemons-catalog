@@ -3,6 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { FindManyOptions, FindOneOptions, In, Like, Repository } from 'typeorm';
 import { Pokemon } from './entities/pokemon.entity';
 import { PokemonFilterDto } from './dto/pokemon-filter.dto';
+import { ActiveUserData } from '../iam/interfaces/active-user-data.interface';
+import { User } from '../user/entities/user.entity';
 
 const POKEMON_RELATIONS: FindOneOptions<Pokemon>['relations'] = [
   'class',
@@ -22,7 +24,9 @@ export class PokemonService {
 
   constructor(
     @InjectRepository(Pokemon)
-    private readonly pokemonTypeRepository: Repository<Pokemon>,
+    private readonly pokemonRepository: Repository<Pokemon>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
   ) {}
 
   /**
@@ -33,7 +37,7 @@ export class PokemonService {
    */
   public async findAll(filter: PokemonFilterDto) {
     this.logger.verbose(`findAll - filter ${JSON.stringify(filter)}`);
-    return this.pokemonTypeRepository.find({
+    return this.pokemonRepository.find({
       ...this.getFilterFindManyOptions(filter),
       skip: filter.skip,
       take: filter.take,
@@ -49,9 +53,7 @@ export class PokemonService {
    */
   public async count(filter: PokemonFilterDto) {
     this.logger.verbose(`count - filter ${JSON.stringify(filter)}`);
-    return this.pokemonTypeRepository.count(
-      this.getFilterFindManyOptions(filter),
-    );
+    return this.pokemonRepository.count(this.getFilterFindManyOptions(filter));
   }
 
   /**
@@ -61,7 +63,7 @@ export class PokemonService {
    * @returns The Pokemon
    */
   public async findByName(pokemonName: string) {
-    const pokemon = await this.pokemonTypeRepository.findOne({
+    const pokemon = await this.pokemonRepository.findOne({
       where: { name: pokemonName },
       relations: POKEMON_RELATIONS,
     });
@@ -82,7 +84,7 @@ export class PokemonService {
    * @returns The Pokemon
    */
   public async findById(pokemonId: number) {
-    const pokemon = await this.pokemonTypeRepository.findOne({
+    const pokemon = await this.pokemonRepository.findOne({
       where: { pokemonId },
       relations: POKEMON_RELATIONS,
     });
@@ -92,6 +94,41 @@ export class PokemonService {
     }
 
     return pokemon;
+  }
+
+  public async togglePokemonFavorite(
+    userData: ActiveUserData,
+    pokemonId: number,
+  ) {
+    const user = await this.userRepository.findOne({
+      where: { email: userData.email },
+      relations: ['favoritePokemons'],
+    });
+
+    if (user === undefined) {
+      throw new NotFoundException(
+        `User with email "${userData.email}" not found`,
+      );
+    }
+
+    const pokemon = await this.pokemonRepository.findOne({
+      where: { pokemonId },
+    });
+
+    if (pokemon === undefined) {
+      throw new NotFoundException(`Pokemon with id "${pokemonId}" not found`);
+    }
+
+    if (user.favoritePokemons.some((p) => p.pokemonId === pokemonId)) {
+      user.favoritePokemons = user.favoritePokemons.filter(
+        (p) => p.pokemonId !== pokemonId,
+      );
+    } else {
+      user.favoritePokemons.push(pokemon);
+    }
+
+    await this.userRepository.save(user);
+    return user.favoritePokemons;
   }
 
   /**

@@ -6,6 +6,7 @@ import ClasssificationsSeeder from './classifications.seeder';
 import AttacksSeeder from './attacks.seeder';
 import ClassesSeeder from './classes.seeder';
 import PokemonSeeder from './pokemon.seeder';
+import UsersSeeder from './users.seeder';
 
 (async () => {
   const dataSource = new DataSource({
@@ -21,6 +22,7 @@ import PokemonSeeder from './pokemon.seeder';
       ClassesSeeder,
       AttacksSeeder,
       PokemonSeeder,
+      UsersSeeder,
     ],
   });
 })();

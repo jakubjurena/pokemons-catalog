@@ -1,14 +1,12 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Attack } from './entities/attack.entity';
-import { Class } from './entities/class.entity';
-import { Classification } from './entities/classification.entity';
 import { Pokemon } from './entities/pokemon.entity';
 import { PokemonController } from './pokemon.controller';
 import { PokemonService } from './pokemon.service';
+import { User } from '../user/entities/user.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Attack, Class, Classification, Pokemon])],
+  imports: [TypeOrmModule.forFeature([Pokemon, User])],
   controllers: [PokemonController],
   providers: [PokemonService],
 })

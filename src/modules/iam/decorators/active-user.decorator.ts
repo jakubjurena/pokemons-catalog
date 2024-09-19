@@ -8,8 +8,10 @@ import { REQUEST_USER_KEY } from '../iam.constants';
  * @returns Active user data
  * @example @ActiveUser() user: ActiveUserData
  */
-export const ActiveUser = createParamDecorator((ctx: ExecutionContext) => {
-  const request = ctx.switchToHttp().getRequest();
-  const user = request[REQUEST_USER_KEY];
-  return user;
-});
+export const ActiveUser = createParamDecorator(
+  (data: unknown, ctx: ExecutionContext) => {
+    const request = ctx.switchToHttp().getRequest();
+    const user = request[REQUEST_USER_KEY];
+    return user;
+  },
+);

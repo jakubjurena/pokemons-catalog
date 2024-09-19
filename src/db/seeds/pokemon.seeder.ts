@@ -1,5 +1,5 @@
 import { Logger } from '@nestjs/common';
-import { DataSource, In } from 'typeorm';
+import { DataSource } from 'typeorm';
 
 import { Attack } from '../../modules/pokemon/entities/attack.entity';
 import { Class } from '../../modules/pokemon/entities/class.entity';

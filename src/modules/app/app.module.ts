@@ -8,6 +8,7 @@ import { ConfigModule } from '@nestjs/config';
 import { PokemonModule } from '../pokemon/pokemon.module';
 import { PokemonTypeModule } from '../pokemon-type/pokemon-type.module';
 import { dataSourceOptions } from 'src/db/data-source';
+import { UserModule } from '../user/user.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { dataSourceOptions } from 'src/db/data-source';
     TypeOrmModule.forRoot(dataSourceOptions),
     PokemonModule,
     PokemonTypeModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -4,10 +4,15 @@ import {
   Logger,
   Param,
   ParseIntPipe,
+  Post,
   Query,
 } from '@nestjs/common';
 import { PokemonFilterDto } from './dto/pokemon-filter.dto';
 import { PokemonService } from './pokemon.service';
+import { ActiveUserData } from '../iam/interfaces/active-user-data.interface';
+import { ActiveUser } from '../iam/decorators/active-user.decorator';
+import { Auth } from '../iam/authentication/decorators/auth.decorator';
+import { AuthType } from '../iam/authentication/enums/auth-type.enum';
 
 export const POKEMON_ENDPOINT = 'pokemon';
 
@@ -46,5 +51,14 @@ export class PokemonController {
       `GET "/${POKEMON_ENDPOINT}/:id" - Searching for pokemon by id: ${id}`,
     );
     return this.pokemonService.findById(id);
+  }
+
+  @Post(':id/toggle-favorite')
+  @Auth(AuthType.Bearer)
+  public async togglePokemonFavorite(
+    @ActiveUser() userData: ActiveUserData,
+    @Param('id', ParseIntPipe) pokemonId: number,
+  ) {
+    return this.pokemonService.togglePokemonFavorite(userData, pokemonId);
   }
 }
