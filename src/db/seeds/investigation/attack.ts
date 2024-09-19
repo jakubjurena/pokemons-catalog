@@ -1,14 +1,12 @@
 import pokemonsJson from '../pokemons.json';
 
-// type PokemonsJSON = typeof pokemonsJson;
-// type PokemonJSON = PokemonsJSON[0];
-// type PokemonAttackTypesJSON = keyof PokemonJSON['attacks'];
-// type PokemonAttackJSON = PokemonJSON['attacks'][PokemonAttackTypesJSON][0];
+type PokemonsJSON = typeof pokemonsJson;
+type PokemonJSON = PokemonsJSON[0];
 
-export const getPokemonAttacksByName = (pokemon) => {
+export const getPokemonAttacksByName = (pokemon: PokemonJSON) => {
   return Object.entries(pokemon.attacks).reduce(
     (acc, [attackType, attacks]) => {
-      const newAttacks = (attacks as any)
+      const newAttacks = attacks
         .map((attack) => ({
           attackType,
           ...attack,
@@ -35,7 +33,10 @@ export const attackNames = Object.keys(attacksFrequency);
 
 export const attackTypeFrequency = pokemonsJson.reduce((acc, pokemon) => {
   Object.keys(pokemon.attacks).forEach((attackType) => {
-    acc[attackType] = acc[attackType] ? acc[attackType] + 1 : 1;
+    const numberOfAttacks = pokemon.attacks[attackType].length;
+    acc[attackType] = acc[attackType]
+      ? acc[attackType] + numberOfAttacks
+      : numberOfAttacks;
   });
   return acc;
 }, {});
