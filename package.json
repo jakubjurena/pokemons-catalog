@@ -19,13 +19,13 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "custom-ts-script": "node --require ts-node/register",
-    "investigate:attacks": "npm run custom-ts-script ./src/db/seeds/investigation/scripts/logAttacks.ts",
-    "investigate:class": "npm run custom-ts-script ./src/db/seeds/investigation/scripts/logClasses.ts",
-    "investigate:classification": "npm run custom-ts-script ./src/db/seeds/investigation/scripts/logClassifications.ts",
-    "investigate:key": "npm run custom-ts-script ./src/db/seeds/investigation/scripts/logJsonKeys.ts",
-    "investigate:type": "npm run custom-ts-script ./src/db/seeds/investigation/scripts/logPokemonTypes.ts",
-    "typeorm": "npm run custom-ts-script ./node_modules/typeorm/cli.js",
-    "seed": "npm run custom-ts-script ./src/db/seeds/run-seeders.ts"
+    "investigate:attacks": "yarn run custom-ts-script ./src/db/seeds/investigation/scripts/logAttacks.ts",
+    "investigate:class": "yarn run custom-ts-script ./src/db/seeds/investigation/scripts/logClasses.ts",
+    "investigate:classification": "yarn run custom-ts-script ./src/db/seeds/investigation/scripts/logClassifications.ts",
+    "investigate:key": "yarn run custom-ts-script ./src/db/seeds/investigation/scripts/logJsonKeys.ts",
+    "investigate:type": "yarn run custom-ts-script ./src/db/seeds/investigation/scripts/logPokemonTypes.ts",
+    "typeorm": "yarn run custom-ts-script ./node_modules/typeorm/cli.js",
+    "seed": "yarn run custom-ts-script ./src/db/seeds/run-seeders.ts"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
