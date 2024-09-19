@@ -1,14 +1,12 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { IamModule } from '../iam/iam.module';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { IamModule } from './modules/iam/iam.module';
 import { ConfigModule } from '@nestjs/config';
-import { PokemonModule } from '../pokemon/pokemon.module';
-import { PokemonTypeModule } from '../pokemon-type/pokemon-type.module';
+import { PokemonModule } from './modules/pokemon/pokemon.module';
+import { PokemonTypeModule } from './modules/pokemon-type/pokemon-type.module';
 import { dataSourceOptions } from 'src/db/data-source';
-import { UserModule } from '../user/user.module';
+import { UserModule } from './modules/user/user.module';
 
 @Module({
   imports: [
@@ -19,7 +17,5 @@ import { UserModule } from '../user/user.module';
     PokemonTypeModule,
     UserModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}
