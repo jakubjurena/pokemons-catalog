@@ -5,6 +5,7 @@ import { Pokemon } from './entities/pokemon.entity';
 import { PokemonFilterDto } from './dto/pokemon-filter.dto';
 import { ActiveUserData } from '../iam/interfaces/active-user-data.interface';
 import { User } from '../user/entities/user.entity';
+import { PatchPokemonFavoriteDto } from './dto/patch-pokemon-favorite.dto';
 
 const POKEMON_RELATIONS: FindOneOptions<Pokemon>['relations'] = [
   'class',
@@ -99,6 +100,7 @@ export class PokemonService {
   public async togglePokemonFavorite(
     userData: ActiveUserData,
     pokemonId: number,
+    patchPokemonFavoriteDto: PatchPokemonFavoriteDto,
   ) {
     const user = await this.userRepository.findOne({
       where: { email: userData.email },
@@ -119,12 +121,17 @@ export class PokemonService {
       throw new NotFoundException(`Pokemon with id "${pokemonId}" not found`);
     }
 
-    if (user.favoritePokemons.some((p) => p.pokemonId === pokemonId)) {
+    if (!patchPokemonFavoriteDto.isFavorite) {
+      // Remove the Pokemon from the list
       user.favoritePokemons = user.favoritePokemons.filter(
         (p) => p.pokemonId !== pokemonId,
       );
-    } else {
+    } else if (!user.favoritePokemons.some((p) => p.pokemonId === pokemonId)) {
+      // Add the Pokemon to the list
       user.favoritePokemons.push(pokemon);
+    } else {
+      // Pokemon is already in the list
+      return user.favoritePokemons;
     }
 
     await this.userRepository.save(user);

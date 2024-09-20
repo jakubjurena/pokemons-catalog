@@ -1,13 +1,15 @@
 import {
+  Body,
   Controller,
   Get,
   Logger,
   Param,
   ParseIntPipe,
-  Post,
+  Patch,
   Query,
 } from '@nestjs/common';
 import { PokemonFilterDto } from './dto/pokemon-filter.dto';
+import { PatchPokemonFavoriteDto } from './dto/patch-pokemon-favorite.dto';
 import { PokemonService } from './pokemon.service';
 import { ActiveUserData } from '../iam/interfaces/active-user-data.interface';
 import { ActiveUser } from '../iam/decorators/active-user.decorator';
@@ -53,12 +55,17 @@ export class PokemonController {
     return this.pokemonService.findById(id);
   }
 
-  @Post(':id/toggle-favorite')
+  @Patch(':id/favorite')
   @Auth(AuthType.Bearer)
   public async togglePokemonFavorite(
     @ActiveUser() userData: ActiveUserData,
     @Param('id', ParseIntPipe) pokemonId: number,
+    @Body() patchPokemonFavoriteDto: PatchPokemonFavoriteDto,
   ) {
-    return this.pokemonService.togglePokemonFavorite(userData, pokemonId);
+    return this.pokemonService.togglePokemonFavorite(
+      userData,
+      pokemonId,
+      patchPokemonFavoriteDto,
+    );
   }
 }
