@@ -4,6 +4,7 @@ import { Classification } from 'src/modules/pokemon/entities/classification.enti
 import { Pokemon } from 'src/modules/pokemon/entities/pokemon.entity';
 import { PokemonType } from 'src/modules/pokemon-type/entities/pokemon-type.entity';
 import { DataSource } from 'typeorm';
+import { User } from 'src/modules/user/entities/user.entity';
 
 export default new DataSource({
   type: 'postgres',
@@ -13,6 +14,6 @@ export default new DataSource({
   password: 'pokemon_password',
   database: 'pokemon_db',
   synchronize: true,
-  entities: [Attack, Class, Classification, Pokemon, PokemonType],
+  entities: [Attack, Class, Classification, Pokemon, PokemonType, User],
   migrations: [],
 });

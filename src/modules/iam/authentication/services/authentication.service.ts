@@ -1,8 +1,16 @@
-import { Injectable, Logger, NotImplementedException } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  NotImplementedException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { SignInDto } from '../dto/sign-in.dto';
 import { RefreshTokenDto } from '../dto/refresh-token.dto';
 import { SignInResponse } from '../../iam.types';
 import { getAccessTokenMock } from '../mock';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from 'src/modules/user/entities/user.entity';
+import { Repository } from 'typeorm';
 
 /**
  * AuthenticationService
@@ -12,7 +20,10 @@ import { getAccessTokenMock } from '../mock';
 export class AuthenticationService {
   private readonly logger = new Logger(AuthenticationService.name);
 
-  constructor() {}
+  constructor(
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+  ) {}
 
   /**
    * @description A method that signs in a user
@@ -20,6 +31,12 @@ export class AuthenticationService {
    * @returns The user email and access token
    */
   public async signIn(signInDto: SignInDto): Promise<SignInResponse> {
+    const user = await this.userRepository.findOne({
+      where: { email: signInDto.email },
+    });
+    if (!user) {
+      throw new UnauthorizedException('Invalid email or password');
+    }
     return {
       email: signInDto.email,
       accessToken: getAccessTokenMock(signInDto.email), // TODO: for full solution use JWT (jwtService from '@nestjs/jwt')

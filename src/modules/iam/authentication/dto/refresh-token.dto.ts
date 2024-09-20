@@ -1,11 +1,14 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { IsString } from 'class-validator';
 
 /**
  * RefreshTokenDto
  * @description A data transfer object that represents the refresh token data
- * @property {string} email - The user's email
  */
 export class RefreshTokenDto {
+  @ApiProperty({
+    description: 'The refresh token',
+  })
   @IsString()
   refreshToken: string;
 }

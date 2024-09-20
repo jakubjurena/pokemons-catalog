@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { PokemonTypeFilterDto } from './dto/pokemon-type-filter.dto';
+import { PokemonTypeFilterPaginatedDto } from './dto/pokemon-type-filter.dto';
 import { PokemonType } from './entities/pokemon-type.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -16,10 +16,10 @@ export class PokemonTypeService {
   /**
    * findAll
    * @description Find all Pokemon types
-   * @param {PokemonTypeFilterDto} filter - The filter to apply
+   * @param {PokemonTypeFilterPaginatedDto} filter - The filter to apply
    * @returns An array of Pokemon types
    */
-  findAll(filter: PokemonTypeFilterDto) {
+  findAll(filter: PokemonTypeFilterPaginatedDto) {
     this.logger.verbose(`findAll - filter ${JSON.stringify(filter)}`);
     return this.pokemonTypeRepository.find({
       skip: filter.skip,

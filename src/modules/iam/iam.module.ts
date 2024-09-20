@@ -1,14 +1,16 @@
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AuthenticationService } from './authentication/services/authentication.service';
 import { AccessTokenGuard } from './authentication/guards/access-token.guard';
 import { AuthenticationGuard } from './authentication/guards/authentication.guard';
 
 import { AuthenticationController } from './authentication/authentication.controller';
+import { User } from 'src/modules/user/entities/user.entity';
 
 @Module({
-  imports: [],
+  imports: [TypeOrmModule.forFeature([User])],
   providers: [
     {
       provide: APP_GUARD,

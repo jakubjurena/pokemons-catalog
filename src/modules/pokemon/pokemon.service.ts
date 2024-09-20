@@ -2,7 +2,10 @@ import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindManyOptions, FindOneOptions, In, Like, Repository } from 'typeorm';
 import { Pokemon } from './entities/pokemon.entity';
-import { PokemonFilterDto } from './dto/pokemon-filter.dto';
+import {
+  PokemonFilterDto,
+  PokemonFilterPaginatedDto,
+} from './dto/pokemon-filter.dto';
 import { ActiveUserData } from '../iam/interfaces/active-user-data.interface';
 import { User } from '../user/entities/user.entity';
 import { PatchPokemonFavoriteDto } from './dto/patch-pokemon-favorite.dto';
@@ -33,10 +36,10 @@ export class PokemonService {
   /**
    * findAll
    * @description Find all Pokemons
-   * @param {PokemonTypeFilterDto} filter - The filter to apply
+   * @param {PokemonFilterPaginatedDto} filter - The filte with pag to apply
    * @returns An array of Pokemon types
    */
-  public async findAll(filter: PokemonFilterDto) {
+  public async findAll(filter: PokemonFilterPaginatedDto) {
     this.logger.verbose(`findAll - filter ${JSON.stringify(filter)}`);
     return this.pokemonRepository.find({
       ...this.getFilterFindManyOptions(filter),
