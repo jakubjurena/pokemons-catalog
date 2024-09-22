@@ -6,6 +6,7 @@ import { PokemonType } from '../../modules/pokemon-type/entities/pokemon-type.en
 import { attacksByType } from './investigation/attack';
 import { AttackType } from '../../modules/pokemon/enums/attack-type.enum';
 import GeneralSeeder from './general.seeder';
+import { TypedObject } from './types';
 
 export default class AttacksSeeder extends GeneralSeeder {
   constructor() {
@@ -28,17 +29,21 @@ export default class AttacksSeeder extends GeneralSeeder {
     }
 
     const pokemonTypes = await pokemonTypesRepository.find();
-    const pokemonTypesByName = pokemonTypes.reduce((acc, type) => {
-      acc[type.name] = type;
-      return acc;
-    }, {});
+    const pokemonTypesByName: TypedObject<PokemonType> = pokemonTypes.reduce(
+      (acc, type) => {
+        acc[type.name] = type;
+        return acc;
+      },
+      {},
+    );
 
-    const attackTypes = Object.keys(attacksByType).map(async (type) => {
+    const attackTypes = Object.values(AttackType).map(async (type) => {
       const attackType = AttackType[type.toLowerCase()];
       const attacks = Object.values(attacksByType[type]);
       this.logger.verbose(`Inserting ${attacks.length} ${type} attacks...`);
-      await attacksRepository.insert(
-        attacks.map((attack: any) => ({
+
+      return await attacksRepository.insert(
+        attacks.map((attack) => ({
           name: attack.name,
           attackType,
           damage: attack.damage,

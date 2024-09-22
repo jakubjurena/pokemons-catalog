@@ -1,9 +1,9 @@
+import { AttackType } from '../../../modules/pokemon/enums/attack-type.enum';
 import pokemonsJson from '../pokemons.json';
+import { TypedObject } from '../types';
+import { AttackByName, Frequency, PokemonJSON } from './types';
 
-type PokemonsJSON = typeof pokemonsJson;
-type PokemonJSON = PokemonsJSON[0];
-
-export const getPokemonAttacksByName = (pokemon: PokemonJSON) => {
+export const getPokemonAttacksByName = (pokemon: PokemonJSON): AttackByName => {
   return Object.entries(pokemon.attacks).reduce(
     (acc, [attackType, attacks]) => {
       const newAttacks = attacks
@@ -21,38 +21,45 @@ export const getPokemonAttacksByName = (pokemon: PokemonJSON) => {
   );
 };
 
-export const attacksFrequency = pokemonsJson.reduce((acc, pokemon) => {
-  Object.keys(pokemon.attacks).forEach((attackType) => {
-    pokemon.attacks[attackType].forEach((attack) => {
-      acc[attack.name] = acc[attack.name] ? acc[attack.name] + 1 : 1;
+export const attacksFrequency: Frequency = pokemonsJson.reduce(
+  (acc, pokemon) => {
+    Object.keys(pokemon.attacks).forEach((attackType) => {
+      pokemon.attacks[attackType].forEach((attack) => {
+        acc[attack.name] = acc[attack.name] ? acc[attack.name] + 1 : 1;
+      });
     });
-  });
-  return acc;
-}, {});
+    return acc;
+  },
+  {},
+);
 export const attackNames = Object.keys(attacksFrequency);
 
-export const attackTypeFrequency = pokemonsJson.reduce((acc, pokemon) => {
-  Object.keys(pokemon.attacks).forEach((attackType) => {
-    const numberOfAttacks = pokemon.attacks[attackType].length;
-    acc[attackType] = acc[attackType]
-      ? acc[attackType] + numberOfAttacks
-      : numberOfAttacks;
-  });
-  return acc;
-}, {});
-export const attackTypes = Object.keys(attackTypeFrequency);
+export const attackTypeFrequency: Frequency<AttackType> = pokemonsJson.reduce(
+  (acc, pokemon) => {
+    Object.keys(pokemon.attacks).forEach((attackType) => {
+      const numberOfAttacks = pokemon.attacks[attackType].length;
+      acc[attackType] = acc[attackType]
+        ? acc[attackType] + numberOfAttacks
+        : numberOfAttacks;
+    });
+    return acc;
+  },
+  { fast: 0, special: 0 },
+);
 
-export const allAttacks = pokemonsJson.reduce((acc, pokemon) => {
+export const allAttacks: AttackByName = pokemonsJson.reduce((acc, pokemon) => {
   const pokemonAttacks = getPokemonAttacksByName(pokemon);
   return { ...acc, ...pokemonAttacks };
 }, {});
 
-export const attacksByType = Object.keys(allAttacks).reduce(
+export const attacksByType: TypedObject<AttackByName, AttackType> = Object.keys(
+  allAttacks,
+).reduce(
   (acc, attackName) => {
     const attack = allAttacks[attackName];
     acc[attack.attackType] = acc[attack.attackType] || {};
     acc[attack.attackType][attackName] = attack;
     return acc;
   },
-  {},
+  { fast: {}, special: {} },
 );

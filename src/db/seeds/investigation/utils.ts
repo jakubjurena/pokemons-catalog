@@ -1,5 +1,10 @@
-export const frequencyOfValues = (object: any, keys: string[]) => {
-  const frequency = object.reduce((acc, pokemon) => {
+import { Frequency, PokemonsJSON } from './types';
+
+export const frequencyOfValues = (
+  pokemons: PokemonsJSON,
+  keys: string[],
+): Frequency => {
+  return pokemons.reduce((acc, pokemon) => {
     keys.forEach((key) => {
       const keyValue = pokemon[key];
       if (keyValue instanceof Array) {
@@ -12,5 +17,4 @@ export const frequencyOfValues = (object: any, keys: string[]) => {
     });
     return acc;
   }, {});
-  return frequency;
 };

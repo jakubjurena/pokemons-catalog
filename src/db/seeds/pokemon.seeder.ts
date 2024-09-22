@@ -11,6 +11,7 @@ import pokemonsJson from './pokemons.json';
 import GeneralSeeder from './general.seeder';
 import { getPokemonAttacksByName } from './investigation/attack';
 import { getClassFromDescription } from './investigation/class';
+import { TypedObject } from './types';
 
 type PokemonJSON = (typeof pokemonsJson)[0];
 
@@ -76,39 +77,43 @@ export default class PokemonSeeder extends GeneralSeeder {
     const pokemonTypes = await pokemonTypesRepository.find();
 
     // Create a dictionary for faster lookup
-    const attacksByName = attacks.reduce((acc, attack) => {
+    const attacksByName: TypedObject<Attack> = attacks.reduce((acc, attack) => {
       acc[attack.name] = attack;
       return acc;
     }, {});
-    const classesByName = classes.reduce((acc, classObject) => {
-      acc[classObject.name] = classObject;
-      return acc;
-    }, {});
-    const classificationsByName = classifications.reduce(
-      (acc, classification) => {
-        acc[classification.name] = classification;
+    const classesByName: TypedObject<Class> = classes.reduce(
+      (acc, classObject) => {
+        acc[classObject.name] = classObject;
         return acc;
       },
       {},
     );
-    const pokemonTypesByName = pokemonTypes.reduce((acc, type) => {
-      acc[type.name] = type;
-      return acc;
-    }, {});
+    const classificationsByName: TypedObject<Classification> =
+      classifications.reduce((acc, classification) => {
+        acc[classification.name] = classification;
+        return acc;
+      }, {});
+    const pokemonTypesByName: TypedObject<PokemonType> = pokemonTypes.reduce(
+      (acc, type) => {
+        acc[type.name] = type;
+        return acc;
+      },
+      {},
+    );
 
     // Map the pokemons to the database schema and add relations
     const pokemons = pokemonsJson.map((pokemon) => {
       const attacks = Object.values(getPokemonAttacksByName(pokemon)).map(
-        (attack: any) => attacksByName[attack.name],
+        (attack) => attacksByName[attack.name],
       );
       const types = Object.values(pokemon['types']).map(
-        (type: any) => pokemonTypesByName[type],
+        (type) => pokemonTypesByName[type],
       );
       const resistant = Object.values(pokemon.resistant).map(
-        (type: any) => pokemonTypesByName[type],
+        (type) => pokemonTypesByName[type],
       );
       const weaknesses = Object.values(pokemon.weaknesses).map(
-        (type: any) => pokemonTypesByName[type],
+        (type) => pokemonTypesByName[type],
       );
       const classification = classificationsByName[pokemon.classification];
       const classObject =
