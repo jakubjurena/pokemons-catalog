@@ -10,7 +10,7 @@ import { ActiveUserData } from '../iam/interfaces/active-user-data.interface';
 import { User } from '../user/entities/user.entity';
 import { PatchPokemonFavoriteDto } from './dto/patch-pokemon-favorite.dto';
 
-const POKEMON_RELATIONS: FindOneOptions<Pokemon>['relations'] = [
+export const POKEMON_RELATIONS: FindOneOptions<Pokemon>['relations'] = [
   'class',
   'classification',
   'nextEvolutions',
@@ -100,7 +100,7 @@ export class PokemonService {
     return pokemon;
   }
 
-  public async togglePokemonFavorite(
+  public async setPokemonFavorite(
     userData: ActiveUserData,
     pokemonId: number,
     patchPokemonFavoriteDto: PatchPokemonFavoriteDto,
@@ -147,9 +147,16 @@ export class PokemonService {
    * @param {PokemonFilterDto} filter - The filter to apply
    * @returns The FindManyOptions
    */
-  private getFilterFindManyOptions(
+  public getFilterFindManyOptions(
     filter: PokemonFilterDto,
   ): FindManyOptions<Pokemon> {
+    if (
+      !filter.name &&
+      !filter.pokemonTypeIds &&
+      filter.isFavorite === undefined
+    ) {
+      return {};
+    }
     return {
       where: {
         name: filter.name ? Like(`%${filter.name}%`) : undefined,

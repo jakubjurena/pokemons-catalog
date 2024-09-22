@@ -77,12 +77,12 @@ export class PokemonController {
   })
   @Patch(':id/favorite')
   @Auth(AuthType.Bearer)
-  public async togglePokemonFavorite(
+  public async setPokemonFavorite(
     @ActiveUser() userData: ActiveUserData,
     @Param('id', ParseIntPipe) pokemonId: number,
     @Body() patchPokemonFavoriteDto: PatchPokemonFavoriteDto,
   ) {
-    return this.pokemonService.togglePokemonFavorite(
+    return this.pokemonService.setPokemonFavorite(
       userData,
       pokemonId,
       patchPokemonFavoriteDto,
