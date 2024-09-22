@@ -7,7 +7,7 @@ import { AccessTokenGuard } from './authentication/guards/access-token.guard';
 import { AuthenticationGuard } from './authentication/guards/authentication.guard';
 
 import { AuthenticationController } from './authentication/authentication.controller';
-import { User } from 'src/modules/user/entities/user.entity';
+import { User } from '../../modules/user/entities/user.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User])],

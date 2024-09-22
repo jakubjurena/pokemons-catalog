@@ -9,7 +9,7 @@ services:
       - .:/usr/src/app
       - /usr/src/app/node_modules # this creates an anonymous mount to platform dependent node_modules, ignoring the local folder
     environment:
-      - APP_ENV=local
+      - APP_ENV=docker
     command: yarn run start:docker-compose
     ports:
       - 3000:3000

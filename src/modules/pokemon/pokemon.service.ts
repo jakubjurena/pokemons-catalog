@@ -110,7 +110,7 @@ export class PokemonService {
       relations: ['favoritePokemons'],
     });
 
-    if (user === undefined) {
+    if (!user) {
       throw new NotFoundException(
         `User with email "${userData.email}" not found`,
       );
@@ -120,7 +120,7 @@ export class PokemonService {
       where: { pokemonId },
     });
 
-    if (pokemon === undefined) {
+    if (!pokemon) {
       throw new NotFoundException(`Pokemon with id "${pokemonId}" not found`);
     }
 

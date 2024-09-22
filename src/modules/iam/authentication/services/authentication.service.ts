@@ -9,7 +9,7 @@ import { RefreshTokenDto } from '../dto/refresh-token.dto';
 import { SignInResponse } from '../../iam.types';
 import { getAccessTokenMock } from '../mock';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/modules/user/entities/user.entity';
+import { User } from '../../../../modules/user/entities/user.entity';
 import { Repository } from 'typeorm';
 
 /**
