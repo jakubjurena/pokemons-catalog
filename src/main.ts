@@ -29,7 +29,7 @@ async function bootstrap() {
 
   const appUrl = await app.getUrl();
   const webConfig = {
-    app: {
+    ['REST API']: {
       url: appUrl,
     },
     swagger: {
