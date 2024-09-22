@@ -1,4 +1,4 @@
-import { PaginationDto } from 'src/common';
+import { PaginationDto } from '../../../common';
 
 /**
  * PokemonTypeFilterPaginatedDto

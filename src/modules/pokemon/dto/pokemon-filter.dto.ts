@@ -1,8 +1,10 @@
 import { ApiProperty, IntersectionType } from '@nestjs/swagger';
 import { IsBoolean, IsOptional, IsString } from 'class-validator';
-import { PaginationDto } from 'src/common';
-import { IsIntString } from 'src/common/decorators/IsIntString.decorator';
-import { TransformValueToBoolean } from 'src/common/decorators/TransformToBoolean.decorator';
+import {
+  IsIntString,
+  PaginationDto,
+  TransformValueToBoolean,
+} from '../../../common';
 
 /**
  * PokemonFilterDto
