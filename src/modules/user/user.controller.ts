@@ -13,6 +13,7 @@ import { ActiveUserData } from '../iam/interfaces/active-user-data.interface';
 
 import { UserService } from './user.service';
 import { UserMeResponse } from './user.types';
+import { Pokemon } from '../pokemon/entities/pokemon.entity';
 
 const USER_ENDPOINT = 'user';
 
@@ -34,5 +35,18 @@ export class UserController {
     @ActiveUser() activeUser: ActiveUserData,
   ): Promise<UserMeResponse> {
     return this.userService.getMe(activeUser);
+  }
+
+  @ApiUnauthorizedResponse({
+    description: 'Unauthorized - token not found or invalid',
+  })
+  @ApiNotFoundResponse({
+    description: 'User not found - access token for deleted user',
+  })
+  @Get('favorites')
+  public async favorites(
+    @ActiveUser() activeUser: ActiveUserData,
+  ): Promise<Pokemon[]> {
+    return this.userService.getFavorites(activeUser);
   }
 }
