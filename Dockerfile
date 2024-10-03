@@ -31,7 +31,7 @@ COPY --chown=node:node --from=development /usr/src/app/node_modules ./node_modul
 
 COPY --chown=node:node . .
 
-RUN npm run build
+RUN yarn run build
 
 ENV NODE_ENV production
 

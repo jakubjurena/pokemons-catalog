@@ -1,5 +1,6 @@
 import { config } from 'dotenv';
-import { DataSourceOptions } from 'typeorm';
+import { DataSource, DataSourceOptions } from 'typeorm';
+import path from 'path';
 
 config();
 
@@ -13,7 +14,9 @@ export const dataSourceOptions: DataSourceOptions = {
   database: process.env.DATABASE_NAME,
   entities:
     process.env.APP_ENV === 'test'
-      ? [__dirname + '/../**/*.entity.ts']
-      : ['dist/src/**/*.entity.js'],
-  synchronize: true, // DO NOT USE IN PRODUCTION - disable and use migrations
+      ? [__dirname + '/../**/*.entity{.ts,.js}']
+      : ['dist/**/*.entity.js'],
+  migrations: [path.join(__dirname, 'migrations', '*.ts')],
 };
+
+export default new DataSource(dataSourceOptions);

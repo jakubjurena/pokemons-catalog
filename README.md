@@ -83,6 +83,16 @@ TypeORM seed
 $ yarn run seed
 ```
 
+## Migrations
+
+- Docker automaticaly run migrations
+
+```bash
+$ yarn run migration:generate # generate migrations
+$ yarn run migration:run # run migrations
+$ yarn run migration:revert # revert last migration
+```
+
 ## Database schema
 
 Schema is described in `pokemon-schema.drawio.svg`.

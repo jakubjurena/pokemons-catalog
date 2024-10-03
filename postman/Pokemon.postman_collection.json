@@ -1,0 +1,352 @@
+{
+	"info": {
+		"_postman_id": "4cf00390-6746-4822-a0c8-88fade003928",
+		"name": "Pokemon",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28534673",
+		"_collection_link": "https://lambda-koala42.postman.co/workspace/GSL~8bda2c7f-baec-4c9a-9195-3e259db345bf/collection/28534673-4cf00390-6746-4822-a0c8-88fade003928?action=share&source=collection_link&creator=28534673"
+	},
+	"item": [
+		{
+			"name": "pokemon",
+			"item": [
+				{
+					"name": "GET pokemons",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/pokemon?isFavorite=true",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"pokemon"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "saur",
+									"disabled": true
+								},
+								{
+									"key": "isFavorite",
+									"value": "true",
+									"description": "true / false, "
+								},
+								{
+									"key": "pokemonTypeIds[]",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pokemonTypeIds[]",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "skip",
+									"value": "20",
+									"disabled": true
+								},
+								{
+									"key": "take",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET pokemons count",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/pokemon/count?name=saur",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"pokemon",
+								"count"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "saur"
+								},
+								{
+									"key": "isFavorite",
+									"value": "false",
+									"description": "true / false, ",
+									"disabled": true
+								},
+								{
+									"key": "pokemonTypeIds[]",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "pokemonTypeIds[]",
+									"value": "2",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET pokemon by id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "access_token_test@test.test",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/pokemon/:pokemonId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"pokemon",
+								":pokemonId"
+							],
+							"variable": [
+								{
+									"key": "pokemonId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET pokemon by name",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/pokemon/byName/:pokemonName",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"pokemon",
+								"byName",
+								":pokemonName"
+							],
+							"variable": [
+								{
+									"key": "pokemonName",
+									"value": "Bulbasaur"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET pokemon by name Copy",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"isFavorite\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/pokemon/:pokemonId/favorite",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"pokemon",
+								":pokemonId",
+								"favorite"
+							],
+							"variable": [
+								{
+									"key": "pokemonId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "type",
+			"item": [
+				{
+					"name": "GET types",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/pokemon-type",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"pokemon-type"
+							],
+							"query": [
+								{
+									"key": "skip",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "take",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "POST signIn",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let resp = pm.response.json();",
+									"if(resp.accessToken){",
+									"    let accessToken = resp.accessToken;",
+									"    pm.environment.set(\"accessToken\",accessToken);",
+									"}else{",
+									"    console.log(\"Access token not found\")",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"jakub.jurena@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/authentication/sign-in",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"authentication",
+								"sign-in"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST refreshTokens",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"refreshToken\": \"test@test.test\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/authentication/refresh-token",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"authentication",
+								"refresh-token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "user - me",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/user/me",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"user",
+								"me"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
