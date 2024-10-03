@@ -15,7 +15,7 @@ export const dataSourceOptions: DataSourceOptions = {
   entities:
     process.env.APP_ENV === 'test'
       ? [__dirname + '/../**/*.entity{.ts,.js}']
-      : ['dist/src/**/*.entity.js'],
+      : ['dist/**/*.entity.js'],
   migrations: [path.join(__dirname, 'migrations', '*.ts')],
 };
 
